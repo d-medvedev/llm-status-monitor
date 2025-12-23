@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Status Monitor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 LLM Status Monitor</h1>
+            <p class="subtitle">Мониторинг доступности языковых моделей</p>
+            <div class="controls">
+                <button id="refreshBtn" class="btn-refresh">🔄 Обновить</button>
+                <span class="last-update" id="lastUpdate">—</span>
+            </div>
+        </header>
+
+        <div id="errorBanner" class="error-banner" style="display: none;">
+            <strong>⚠️ Ошибка CORS:</strong> Прямые запросы к API заблокированы. 
+            Для работы приложения необходим прокси-сервер. 
+            См. инструкции в README.md
+        </div>
+
+        <div id="modelsContainer" class="models-container">
+            <!-- Модели будут загружены динамически -->
+        </div>
+
+        <footer>
+            <p>Автоматическое обновление каждые 30 секунд</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
