@@ -1,0 +1,17 @@
+[build]
+  # Netlify будет автоматически определять настройки сборки
+  # Для статического сайта сборка не требуется
+  publish = "."
+
+[functions]
+  # Директория с функциями
+  directory = "netlify/functions"
+  # Node.js версия для функций
+  node_bundler = "esbuild"
+
+[[redirects]]
+  # Редирект для SPA (если нужно)
+  from = "/*"
+  to = "/index.html"
+  status = 200
+

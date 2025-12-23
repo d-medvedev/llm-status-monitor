@@ -4,6 +4,11 @@ let updateInterval = null;
 let corsErrorDetected = false;
 const CONFIG_STORAGE_KEY = 'llm_monitor_config';
 
+// Определяем, используем ли мы Netlify (проверка по домену)
+const isNetlify = window.location.hostname.includes('netlify.app') || 
+                  window.location.hostname.includes('netlify.com');
+const PROXY_URL = '/.netlify/functions/proxy';
+
 // Загрузка конфигурации
 async function loadConfig() {
     // Сначала пробуем загрузить из localStorage
@@ -131,15 +136,37 @@ async function checkModelStatus(provider, modelName, config) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 секунд таймаут
 
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${config.access_token}`
-            },
-            body: JSON.stringify(requestBody),
-            signal: controller.signal
-        });
+        let response;
+        
+        // Используем прокси на Netlify, иначе прямой запрос
+        if (isNetlify) {
+            // Запрос через Netlify прокси
+            response = await fetch(PROXY_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    targetUrl: apiUrl,
+                    body: requestBody,
+                    headers: {
+                        'Authorization': `Bearer ${config.access_token}`
+                    }
+                }),
+                signal: controller.signal
+            });
+        } else {
+            // Прямой запрос (для локальной разработки или если CORS настроен)
+            response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${config.access_token}`
+                },
+                body: JSON.stringify(requestBody),
+                signal: controller.signal
+            });
+        }
 
         clearTimeout(timeoutId);
         const endTime = Date.now();
@@ -170,8 +197,8 @@ async function checkModelStatus(provider, modelName, config) {
         const endTime = Date.now();
         const latency = endTime - startTime;
 
-        // Проверка на CORS ошибку
-        if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+        // Проверка на CORS ошибку (только если не используем Netlify)
+        if (!isNetlify && error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
             if (!corsErrorDetected) {
                 corsErrorDetected = true;
                 document.getElementById('errorBanner').style.display = 'block';
