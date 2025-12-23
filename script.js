@@ -2,18 +2,102 @@
 let modelsConfig = {};
 let updateInterval = null;
 let corsErrorDetected = false;
+const CONFIG_STORAGE_KEY = 'llm_monitor_config';
 
 // Загрузка конфигурации
 async function loadConfig() {
+    // Сначала пробуем загрузить из localStorage
+    const savedConfig = localStorage.getItem(CONFIG_STORAGE_KEY);
+    if (savedConfig) {
+        try {
+            modelsConfig = JSON.parse(savedConfig);
+            hideConfigForm();
+            renderModels();
+            return;
+        } catch (error) {
+            console.error('Ошибка парсинга сохраненной конфигурации:', error);
+            localStorage.removeItem(CONFIG_STORAGE_KEY);
+        }
+    }
+
+    // Если нет в localStorage, пробуем загрузить config.json (для локальной разработки)
     try {
         const response = await fetch('config.json');
-        modelsConfig = await response.json();
-        renderModels();
+        if (response.ok) {
+            modelsConfig = await response.json();
+            // Сохраняем в localStorage для будущего использования
+            localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(modelsConfig));
+            hideConfigForm();
+            renderModels();
+            return;
+        }
     } catch (error) {
-        console.error('Ошибка загрузки конфигурации:', error);
-        document.getElementById('modelsContainer').innerHTML = 
-            '<div class="error">Не удалось загрузить конфигурацию моделей</div>';
+        console.log('config.json не найден, используем форму ввода');
     }
+
+    // Если ничего не загрузилось, показываем форму
+    showConfigForm();
+}
+
+// Сохранение конфигурации
+function saveConfig(config) {
+    try {
+        modelsConfig = typeof config === 'string' ? JSON.parse(config) : config;
+        localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(modelsConfig));
+        hideConfigForm();
+        renderModels();
+        // Запускаем проверку после загрузки конфигурации
+        if (updateInterval) {
+            clearInterval(updateInterval);
+        }
+        checkAllModels();
+        updateInterval = setInterval(checkAllModels, 30000);
+    } catch (error) {
+        alert('Ошибка: Неверный формат JSON. Проверьте конфигурацию.');
+        console.error('Ошибка сохранения конфигурации:', error);
+    }
+}
+
+// Показать форму конфигурации
+function showConfigForm() {
+    const form = document.getElementById('configForm');
+    if (form) {
+        form.style.display = 'block';
+    }
+    const container = document.getElementById('modelsContainer');
+    if (container) {
+        container.style.display = 'none';
+    }
+}
+
+// Скрыть форму конфигурации
+function hideConfigForm() {
+    const form = document.getElementById('configForm');
+    if (form) {
+        form.style.display = 'none';
+    }
+    const container = document.getElementById('modelsContainer');
+    if (container) {
+        container.style.display = 'block';
+    }
+}
+
+// Загрузка конфигурации из файла
+function loadConfigFromFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const config = JSON.parse(e.target.result);
+            saveConfig(config);
+        } catch (error) {
+            alert('Ошибка: Неверный формат JSON файла.');
+            console.error('Ошибка загрузки файла:', error);
+        }
+    };
+    reader.readAsText(file);
 }
 
 // Проверка статуса модели
@@ -194,9 +278,29 @@ document.addEventListener('DOMContentLoaded', () => {
         checkAllModels();
     });
 
-    // Автоматическое обновление каждые 30 секунд
-    checkAllModels(); // Первая проверка сразу
-    updateInterval = setInterval(checkAllModels, 30000);
+    // Кнопка настроек
+    document.getElementById('configBtn').addEventListener('click', () => {
+        showConfigForm();
+    });
+
+    // Загрузка конфигурации из файла
+    document.getElementById('configFileInput').addEventListener('change', loadConfigFromFile);
+
+    // Сохранение конфигурации из текстового поля
+    document.getElementById('saveConfigBtn').addEventListener('click', () => {
+        const configText = document.getElementById('configTextarea').value.trim();
+        if (configText) {
+            saveConfig(configText);
+        } else {
+            alert('Пожалуйста, введите конфигурацию в текстовое поле.');
+        }
+    });
+
+    // Автоматическое обновление каждые 30 секунд (только если конфигурация загружена)
+    if (Object.keys(modelsConfig).length > 0) {
+        checkAllModels();
+        updateInterval = setInterval(checkAllModels, 30000);
+    }
 });
 
 // Очистка интервала при закрытии страницы

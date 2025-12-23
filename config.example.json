@@ -3,29 +3,29 @@
     "Qwen3-Coder-30B-A3B-Instruct": {
       "url": "http://195.209.214.70:8000",
       "model": "/model/Qwen3-Coder-30B-A3B-Instruct",
-      "access_token": "F9yei26LMobzDdVmdKuEcbIlTod3OoTJXAszIUoMdAwYwGWS50bvKODj99JZRqcJA8mUQgR1zlXoHpCORP97ODLAyfagqrob"
+      "access_token": "YOUR_ACCESS_TOKEN_HERE"
     },
     "Qwen3-30B-A3B-FP8": {
       "url": "http://81.94.150.204:8000",
       "model": "/Qwen/Qwen3-30B-A3B-FP8",
-      "access_token": "Qwen3-30B-A3B-FP8"
+      "access_token": "YOUR_ACCESS_TOKEN_HERE"
     },
     "Qwen-QwQ-32B": {
       "url": "http://81.94.159.88:8000",
       "model": "/model/QwQ-32B",
-      "access_token": "F9yei26LMobzDdVmdKuEcbIlTod3OoTJXAszIUoMdAwYwGWS50bvKODj99JZRqcJA8mUQgR1zlXoHpCORP97ODLAyfagqrob"
+      "access_token": "YOUR_ACCESS_TOKEN_HERE"
     },
     "QwQ-32B-AWQ": {
       "url": "http://81.94.159.73:8000",
       "model": "/model/QwQ-32B-AWQ",
-      "access_token": "F9yei26LMobzDdVmdKuEcbIlTod3OoTJXAszIUoMdAwYwGWS50bvKODj99JZRqcJA8mUQgR1zlXoHpCORP97ODLAyfagqrob"
+      "access_token": "YOUR_ACCESS_TOKEN_HERE"
     }
   },
   "Selectel": {
     "QwQ-32B-AWQ": {
       "url": "http://185.161.67.7:8000",
       "model": "/QwQ-32B-AWQ",
-      "access_token": "F9yei26LMobzDdVmdKuEcbIlTod3OoTJXAszIUoMdAwYwGWS50bvKODj99JZRqcJA8mUQgR1zlXoHpCORP97ODLAyfagqrob"
+      "access_token": "YOUR_ACCESS_TOKEN_HERE"
     }
   }
 }

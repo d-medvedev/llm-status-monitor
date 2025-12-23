@@ -48,7 +48,8 @@ header h1 {
     margin-top: 20px;
 }
 
-.btn-refresh {
+.btn-refresh,
+.btn-config {
     background: rgba(255, 255, 255, 0.2);
     border: 2px solid white;
     color: white;
@@ -60,14 +61,16 @@ header h1 {
     font-weight: 600;
 }
 
-.btn-refresh:hover {
+.btn-refresh:hover,
+.btn-config:hover {
     background: white;
     color: #667eea;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.btn-refresh:active {
+.btn-refresh:active,
+.btn-config:active {
     transform: translateY(0);
 }
 
@@ -252,5 +255,134 @@ footer {
 
 .status.checking {
     animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Форма конфигурации */
+.config-form {
+    padding: 30px;
+    background: #f8f9fa;
+}
+
+.config-form-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.config-form h2 {
+    color: #667eea;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+}
+
+.config-description {
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.config-options {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.config-option {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    border: 2px solid #e0e0e0;
+}
+
+.config-option h3 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+.config-option p {
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.config-option a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.config-option a:hover {
+    text-decoration: underline;
+}
+
+.file-input {
+    display: none;
+}
+
+.file-label {
+    display: inline-block;
+    background: #667eea;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.file-label:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.config-textarea {
+    width: 100%;
+    min-height: 300px;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    resize: vertical;
+    margin-bottom: 15px;
+}
+
+.config-textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.btn-save {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.btn-save:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-save:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .config-form {
+        padding: 20px;
+    }
+
+    .config-option {
+        padding: 20px;
+    }
 }
 
